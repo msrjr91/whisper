@@ -24,5 +24,11 @@ Whisper is a social media app centered around giving users words of wisdom or ge
  - Allow posts to be in the form of a poll
  - Show data visualization for posts made or contributions made
  - Create a chat group functionality
+
+
+## Tech Stack
+- Frontend: React, node.js, JavaScript, HTML, CSS
+- Backend: Django, Python, PostgreSQL
+
  
  
