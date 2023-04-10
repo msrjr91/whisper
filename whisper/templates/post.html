@@ -1,0 +1,9 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<p>{{post.content}}</p>
+<a href="{% url 'edit-post' post.id %}">Edit</a>
+<a href="{% url 'delete-post' post.id %}">Delete</a>
+
+{% endblock %}
