@@ -2,8 +2,48 @@
 
 {% block content %}
 
-<p>{{post.content}}</p>
-<a href="{% url 'edit-post' post.id %}">Edit</a>
-<a href="{% url 'delete-post' post.id %}">Delete</a>
+<style>
+  .single-post {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+  }
+
+  .edit-delete {
+    display: flex;
+    justify-content: flex-end;
+    
+  }
+
+</style>
+
+<div class="single-post">
+
+  <div class="empty-left">
+
+  </div>
+  <div class="all-comments">
+    <div class="this-post">
+      <h4>@{{post.user}}</h4>
+      <p style="margin: 0">{{post.content}}</p>
+    </div>
+    {% if request.user == post.user %}
+    <div class="edit-delete">
+      <a href="{% url 'edit-post' post.id %}"><small>Edit</small></a>
+      <a href="{% url 'delete-post' post.id %}" style="margin-left: 5px;"><small>Delete</small></a>
+    </div>
+    {% endif %}
+    <hr>
+    {% for comment in comments %}
+    <div class="post-comments">
+      <h4>@{{comment.user}}</h4>
+      <p>{{comment.content}}</p>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="empty-right">
+
+  </div>
+</div>
+
 
 {% endblock %}

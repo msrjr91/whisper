@@ -8,23 +8,30 @@
 <style>
   .home-container {
     display: grid;
-    grid-template-columns: 1fr 3fr;
+    grid-template-columns: 1fr 3fr 1fr;
+    gap: 2em;
+  }
+
+  .search-category {
+    display: flex;
+    align-items: center;
+
   }
 
   .categories {
+    width: 100%;
     display: flex;
-    align-items: flex-start;
     justify-content: space-between;
-    overflow-x: auto;
+    overflow-x: scroll;
   }
 </style>
 
-<h4>Home Page</h4>
 <div class="home-container">
   <div class="recent_feed">
     <h5>Recent Activity</h5>
   </div>
   <div class="home-posts">
+    {% if request.user.is_authenticated %}
     <div>
       <form method="Post" action="">
         {% csrf_token %}
@@ -32,30 +39,43 @@
         <input type="submit" value="Post">
       </form>
     </div>
+    {% else %}
+    <h5>Please sign in to post.</h5>
+    {% endif %}
     <hr>
-    <h5>View by Category</h5>
+    <div class="search-category">
+      <h5 style="margin-right: 10px;">View by Category</h5>
+      <form method="GET" action="{%url 'home' %}">
+        <input type="text" name="q" placeholder="search category"/>
+      </form>
+    </div>
     <div class="categories">
       <div class="category-item">
         <a href="{% url 'home' %}">All</a>
       </div>
       {% for category in categories %}
-        <div class="category-item">
-          <a href="{% url 'home' %}?q={{category.name}}">{{category.name}}</a>
-        </div>
+      <div class="category-item">
+        <a href="{% url 'home' %}?q={{category.name}}">{{category.name}}</a>
+      </div>
       {% endfor %}
     </div>
     <hr>
     <div>
+      
       {% for post in posts %}
         <div>
           <span>@{{post.user}}</span>
           <a href="{% url 'view-post' post.id %}"><p>{{post.content}}</p></a>
-          <p>{{post.category}}</p>
+          <small>{{post.category}}</small>
           <hr>
         </div>
     
       {% endfor %}
+      
     </div>
+  </div>
+  <div class="profile-view">
+    <h5>Profile Section</h5>
   </div>
 
 </div>
