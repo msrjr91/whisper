@@ -64,7 +64,7 @@
       
       {% for post in posts %}
         <div>
-          <span>@{{post.user}}</span>
+          <a href="{% url 'profile' post.user_id %}">@{{post.user}}</a>
           <a href="{% url 'view-post' post.id %}"><p>{{post.content}}</p></a>
           <small>{{post.category}}</small>
           <hr>

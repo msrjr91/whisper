@@ -3,6 +3,12 @@
 {% block content %}
 
 <style>
+
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
   .single-post {
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
@@ -14,17 +20,42 @@
     
   }
 
+  .comment-container {
+    background-color: rgb(35, 35, 40);
+    color:rgb(200, 205, 197)
+  }
+
+  .comment {
+    margin-bottom: 15px;
+    margin-top: 5px;
+  }
+  .post-comments a{
+    color: rgb(200, 205, 197);
+    text-decoration: none;
+  }
+
+  .comment-meta {
+    display: flex;
+  }
+
+  .delete-comment {
+    opacity: 0.2;
+  }
+
+  .delete-comment:hover {
+    opacity: 0.8;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
 </style>
 
 <div class="single-post">
-
   <div class="empty-left">
-
   </div>
   <div class="all-comments">
     <div class="this-post">
       <h4>@{{post.user}}</h4>
-      <p style="margin: 0">{{post.content}}</p>
+      <p class="comment">{{post.content}}</p>
     </div>
     {% if request.user == post.user %}
     <div class="edit-delete">
@@ -33,15 +64,39 @@
     </div>
     {% endif %}
     <hr>
-    {% for comment in comments %}
-    <div class="post-comments">
-      <h4>@{{comment.user}}</h4>
-      <p>{{comment.content}}</p>
+
+    {% if request.user.is_authenticated %}
+    <div class="post-comment">
+      <form method="POST" action="">
+        {% csrf_token %}
+        <input type="text" name="comment-body" placeholder="Type your response"/>
+      </form>
     </div>
-    {% endfor %}
+    {% endif %}
+
+    
+    <div class="comment-container">
+      {% for comment in comments %}
+      <div class="post-comments">
+        <h5>@{{comment.user}} -- {{comment.created|timesince}}</h5>
+        <div class="comment-meta">
+          <small style="margin-right: 15px;">Replying to @{{post.user}}</small>
+          {% if request.user == comment.user %}
+          <a href="{% url 'delete-comment' comment.id %}" class="delete-comment">Delete</a>
+          {% endif %}
+        </div>
+        <p class="comment">{{comment.content}}</p>
+      </div>
+      {% endfor %}
+    </div>
+
   </div>
   <div class="empty-right">
-
+    {% for commenter in commented %}
+      <div class="post-users">
+        <h5>@{{commenter}}</h5>
+      </div>
+    {% endfor %}
   </div>
 </div>
 

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .models import Post, Category, Comment
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -84,10 +84,35 @@ def home(request):
 
 def singlePost(request, pk):
   post = Post.objects.get(id=pk)
-  comments = Comment.objects.filter(post_id=pk)
+  comments = Comment.objects.filter(post_id=pk).order_by('-created')
+  commented = post.commented.all()
+  
+  if request.method == 'POST':
+    comment = Comment.objects.create(
+      user = request.user,
+      post = post,
+      content = request.POST.get('comment-body'),
+    )
+    post.commented.add(request.user)
+    return redirect('view-post', pk=post.id)
+  
   context = {'post': post, 
-             'comments': comments,}
+             'comments': comments,
+             'commented': commented}
+  
   return render(request, 'post.html', context)
+
+@login_required(login_url='/login')
+def deleteComment(request, pk):
+  comment = Comment.objects.get(id=pk)
+  
+  if request.user != comment.user:
+    return HttpResponse('You are not allowed to delete this post.')
+  
+  if request.method == 'POST':
+    comment.delete()
+    return redirect('view-post', pk=comment.post_id)
+  return render(request, 'delete.html')
 
 
 @login_required(login_url='/login')
@@ -120,5 +145,9 @@ def deletePost(request, pk):
   return render(request, 'delete.html')
 
 
-def profile(request):
-  return render(request, 'profile.html')
+def profile(request, pk):
+  user = User.objects.get(id=pk)
+  posts = user.post_set.all()
+  context = {'user': user,
+             'posts': posts}
+  return render(request, 'profile.html', context)
