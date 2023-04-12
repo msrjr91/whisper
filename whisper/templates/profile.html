@@ -25,11 +25,15 @@
 <div class="profile-container">
 
   <div class="profile-summary">
-    <h1>Profile Content</h1>
+    <h1>[Profile Picture Here]</h1>
     <h4>@{{user.username}}</h4>
+    <p>{{user.id}}</p>
     <h5>Followers: </h5>
     <h5>Posts: {{post_count}}</h5>
     <h5>Contributions: {{comment_count}}</h5>
+    {% if user.id != request.user.id %}
+    <a href="">+ Send Friend Request</a>
+    {% endif %}
   </div>
   
   <div class="all-posts">
@@ -37,7 +41,7 @@
     {% for post in posts %}
     <div class="profile-posts">
       <small>@{{post.user.username}} -- {{post.created|timesince}} ago</small>
-      <p>{{post.content}}</p>
+      <a href="{% url 'view-post' post.id %}"><p>{{post.content}}</p></a>
       <small>{{post.category}}</small>
       <hr>
     </div>

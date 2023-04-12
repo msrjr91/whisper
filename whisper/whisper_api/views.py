@@ -156,6 +156,7 @@ def deletePost(request, pk):
 
 def profile(request, pk):
   user = User.objects.get(id=pk)
+  # profile('USER IS: ', user.id)
   posts = user.post_set.all()
   post_count = len(user.post_set.all())
   comment_count = len(user.comment_set.all())
@@ -164,3 +165,8 @@ def profile(request, pk):
              'post_count': post_count,
              'comment_count': comment_count}
   return render(request, 'profile.html', context)
+
+@login_required
+def updateUser(request):
+  
+  return render(request, 'updateUser.html')
