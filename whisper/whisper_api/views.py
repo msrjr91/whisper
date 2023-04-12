@@ -10,7 +10,6 @@ from .forms import PostForm
 
 # Create your views here.
 def signin(request):
-  
   page = 'signin'
   
   if request.user.is_authenticated:
@@ -67,16 +66,26 @@ def home(request):
   posts = Post.objects.filter(category__name__icontains=q)
   categories = Category.objects.all()
   
+  post_count = None
+  comment_count = None
+  if request.user.is_authenticated:
+    post_count = len(Post.objects.filter(user_id=request.user.id))
+    comment_count = len(Comment.objects.filter(user_id=request.user.id))
+  
   form = PostForm()
   if request.method == 'POST':
     form = PostForm(request.POST)
     if form.is_valid():
-      form.save()
+      post = form.save(commit=False)
+      post.user = request.user
+      post.save()
       return redirect('home')
     
   context = {'posts': posts, 
              'form': form,
              'categories': categories,
+             'post_count': post_count,
+             'comment_count': comment_count,
              }
   
   return render(request, 'home.html', context)
@@ -148,6 +157,10 @@ def deletePost(request, pk):
 def profile(request, pk):
   user = User.objects.get(id=pk)
   posts = user.post_set.all()
+  post_count = len(user.post_set.all())
+  comment_count = len(user.comment_set.all())
   context = {'user': user,
-             'posts': posts}
+             'posts': posts,
+             'post_count': post_count,
+             'comment_count': comment_count}
   return render(request, 'profile.html', context)

@@ -10,6 +10,10 @@
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
     gap: 2em;
+    height: 90vh;
+    width: 80vw;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .search-category {
@@ -24,12 +28,28 @@
     justify-content: space-between;
     overflow-x: scroll;
   }
+
+  .home-posts {
+    height: 90vh;
+  }
+
+  .all-posts {
+    height: 60%;
+    overflow: auto;
+  }
+
+  .all-posts::-webkit-scrollbar {
+    display: none;
+  }
 </style>
 
 <div class="home-container">
+
   <div class="recent_feed">
-    <h5>Recent Activity</h5>
+    <h5>Your Network's Activity</h5>
   </div>
+
+
   <div class="home-posts">
     {% if request.user.is_authenticated %}
     <div>
@@ -43,12 +63,14 @@
     <h5>Please sign in to post.</h5>
     {% endif %}
     <hr>
+
     <div class="search-category">
       <h5 style="margin-right: 10px;">View by Category</h5>
       <form method="GET" action="{%url 'home' %}">
         <input type="text" name="q" placeholder="search category"/>
       </form>
     </div>
+
     <div class="categories">
       <div class="category-item">
         <a href="{% url 'home' %}">All</a>
@@ -60,7 +82,8 @@
       {% endfor %}
     </div>
     <hr>
-    <div>
+
+    <div class="all-posts">
       
       {% for post in posts %}
         <div>
@@ -74,8 +97,17 @@
       
     </div>
   </div>
+
+
   <div class="profile-view">
-    <h5>Profile Section</h5>
+    
+    {% if request.user.is_authenticated %}
+    <h5>[Profile Pic Here]</h5>
+    <a href="{% url 'profile' request.user.id%}">@{{request.user}}</a>
+    <h5>Connections: </h5>
+    <h5>Posts: {{post_count}}</h5>
+    <h5>Contributions: {{comment_count}}</h5>
+    {% endif %}
   </div>
 
 </div>

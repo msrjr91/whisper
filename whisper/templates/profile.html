@@ -7,6 +7,18 @@
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
     gap: 2em;
+    height: 90vh;
+    width: 80vw;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .all-posts {
+    height: 90vh;
+    overflow: auto;
+  }
+  .all-posts::-webkit-scrollbar {
+    display: none;
   }
 </style>
 
@@ -15,8 +27,11 @@
   <div class="profile-summary">
     <h1>Profile Content</h1>
     <h4>@{{user.username}}</h4>
+    <h5>Followers: </h5>
+    <h5>Posts: {{post_count}}</h5>
+    <h5>Contributions: {{comment_count}}</h5>
   </div>
-
+  
   <div class="all-posts">
     <h2>@{{user.username}}'s posts</h2>
     {% for post in posts %}
