@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Post, Category, Comment
+from .models import Post, Category, Comment, Profile
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -160,10 +160,21 @@ def profile(request, pk):
   posts = user.post_set.all()
   post_count = len(user.post_set.all())
   comment_count = len(user.comment_set.all())
+  profile = Profile.objects.get(user_id=pk)
+  if request.method == "POST":
+    current_profile = request.user.profile
+    action = request.POST['follow']
+    if action == 'unfollow':
+      current_profile.follows.remove(profile)
+    elif action == 'follow':
+      current_profile.follows.add(profile)
+    current_profile.save()
+
   context = {'user': user,
              'posts': posts,
              'post_count': post_count,
-             'comment_count': comment_count}
+             'comment_count': comment_count,
+             'profile': profile,}
   return render(request, 'profile.html', context)
 
 @login_required
