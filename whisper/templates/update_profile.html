@@ -1,0 +1,12 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<p>upload</p>
+<img src={{profile.avatar.url}} alt="{% url 'update-profile' request.user.id %}" style="height: 200px; width: 200px; object-fit: cover; border-radius: 50%;">
+<form method="POST" action="" enctype="multipart/form-data">
+  {% csrf_token %}  
+  {{form}}
+  <!-- <button>Update</button> -->
+  <input type="submit" value="update">
+</form>
+{% endblock %}
