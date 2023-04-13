@@ -14,23 +14,41 @@
   }
 
   .all-posts {
-    height: 90vh;
+    height: 80vh;
     overflow: auto;
   }
   .all-posts::-webkit-scrollbar {
     display: none;
+  }
+
+  .profile-summary {
+    border: 1px solid red;
+  }
+
+  .profile-summary-container {
+    border: 1px solid black;
+    height: 90vh;
+  }
+
+  .profile-summary-items {
+    padding: 1rem;
   }
 </style>
 
 <div class="profile-container">
   <div class="profile-summary-container">
     <div class="profile-summary">
-      <h1>[Profile Picture Here]</h1>
-      <h4>@{{user.username}}</h4>
-      <p>{{user.id}}</p>
-      <h5>Followers: {{profile.followed_by.all.count}}</h5>
-      <h5>Posts: {{post_count}}</h5>
-      <h5>Contributions: {{comment_count}}</h5>
+      <img src="{{profile.avatar.url}}" alt={{user.id}} style="height: 200px; width: 200px; object-fit: cover; border-radius: 50%;"/>
+      <div class="profile-summary-items">
+        <h4>@{{user.username}}</h4>
+        {% if profile.id == request.user.id %}
+        <a href="{% url 'update-profile' request.user.id %}">Update Profile</a>
+        {% endif %}
+        <p>{{user.id}}</p>
+        <h5>Followers: {{profile.followed_by.all.count}}</h5>
+        <h5>Posts: {{post_count}}</h5>
+        <h5>Contributions: {{comment_count}}</h5>
+      </div>
     </div>
     {% if request.user.is_authenticated %}
     <form method="POST" action="">
@@ -51,16 +69,18 @@
     <br>
   </div>
 
-  <div class="all-posts">
+  <div class="all-posts-container">
     <h2>@{{user.username}}'s posts</h2>
-    {% for post in posts %}
-    <div class="profile-posts">
-      <small>@{{post.user.username}} -- {{post.created|timesince}} ago</small>
-      <a href="{% url 'view-post' post.id %}"><p>{{post.content}}</p></a>
-      <small>{{post.category}}</small>
-      <hr>
+    <div class="all-posts">
+      {% for post in posts %}
+      <div class="profile-posts">
+        <small>@{{post.user.username}} -- {{post.created|timesince}} ago</small>
+        <a href="{% url 'view-post' post.id %}"><p>{{post.content}}</p></a>
+        <small>{{post.category}}</small>
+        <hr>
+      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
   </div>
 
   <div class="profile-followers">

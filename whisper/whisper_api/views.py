@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
-from .forms import PostForm
+from .forms import PostForm, UpdateProfileForm 
 
 # Create your views here.
 def signin(request):
@@ -161,6 +161,8 @@ def profile(request, pk):
   post_count = len(user.post_set.all())
   comment_count = len(user.comment_set.all())
   profile = Profile.objects.get(user_id=pk)
+  print("The PROFILE IS", profile)
+
   if request.method == "POST":
     current_profile = request.user.profile
     action = request.POST['follow']
@@ -174,10 +176,22 @@ def profile(request, pk):
              'posts': posts,
              'post_count': post_count,
              'comment_count': comment_count,
-             'profile': profile,}
+             'profile': profile}
   return render(request, 'profile.html', context)
 
 @login_required
-def updateUser(request):
+def updateProfile(request, pk):
+  user = request.user
+  profile = Profile.objects.get(user_id=pk)
+  form = UpdateProfileForm(instance=user)
+  if request.POST:
+    form = UpdateProfileForm(request.POST, request.FILES, instance=user)
+    print("THE REQUEST:", request.FILES)
+    if form.is_valid():
+      form.save()
+      return redirect('home')
   
-  return render(request, 'updateUser.html')
+  
+  context = {'form': form,
+             'profile': profile}
+  return render(request, 'update_profile.html', context)

@@ -42,9 +42,12 @@ class Profile(models.Model):
                                    related_name='followed_by',
                                    symmetrical=False,
                                    blank=True)
+  avatar = models.ImageField(null=True, default="Whisper/files/covers/default-avatar-profile-icon-of-social-media-user-vector.jpg")
+  
   
   def __str__(self):
     return self.user.username
+
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
@@ -56,4 +59,8 @@ def create_profile(sender, instance, created, **kwargs):
     
 # post_save.connect(create_profile, sender=User)
 
-  
+# class Avatar(models.Model):
+#   user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+#   def __str__(self):
+#     return self.user

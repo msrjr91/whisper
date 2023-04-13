@@ -5,6 +5,7 @@ from .models import Category, Post, Comment, Profile
 admin.site.register(Category)
 admin.site.register(Post)
 admin.site.register(Comment)
+
 # admin.site.register(Profile)
 # Show profile info in user model
 class UserProfile(admin.StackedInline):

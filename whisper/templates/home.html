@@ -41,18 +41,55 @@
   .all-posts::-webkit-scrollbar {
     display: none;
   }
+
+  #id_content {
+    display: block;
+    width: 100%;
+    height: 10vh;
+    border: 1px solid gray;
+    border-radius: 22px;
+    padding: 1.5em;
+  }
+
+  #id_category {
+    display: inline-block;
+    border-radius: 12px;
+  }
+  label {
+    display: block;
+  }
+  .post-input input {
+    display: inline-block;
+    border-radius: 12px;
+    
+  }
+
+  .post-input p {
+    display: block;
+  }
+/* 
+  .profile-view {
+    border: 1px solid black;
+  } */
+
+  .profile-view-info {
+    padding: 2rem;
+  }
 </style>
 
 <div class="home-container">
-
+  
   <div class="recent_feed">
+    {% if request.user.is_authenticated %}
     <h5>Your Network's Activity</h5>
+    {% endif %}
   </div>
+  
 
 
   <div class="home-posts">
     {% if request.user.is_authenticated %}
-    <div>
+    <div class="post-input">
       <form method="Post" action="">
         {% csrf_token %}
         {{form.as_p}}
@@ -102,11 +139,13 @@
   <div class="profile-view">
     
     {% if request.user.is_authenticated %}
-    <h5>[Profile Pic Here]</h5>
-    <a href="{% url 'profile' request.user.id%}">@{{request.user}}</a>
-    <h5>Connections: </h5>
-    <h5>Posts: {{post_count}}</h5>
-    <h5>Contributions: {{comment_count}}</h5>
+    <img src={{request.user.profile.avatar.url}} style="height: 200px; width: 200px; object-fit: cover; border-radius: 50%;"/>
+    <div class="profile-view-info">
+      <a href="{% url 'profile' request.user.id%}">@{{request.user}}</a>
+      <h5>Connections: </h5>
+      <h5>Posts: {{post_count}}</h5>
+      <h5>Contributions: {{comment_count}}</h5>
+    </div>  
     {% endif %}
   </div>
 
