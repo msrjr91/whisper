@@ -1,154 +1,81 @@
-
-
 {% extends 'main.html' %}
 
 
 {% block content %}
 
-<style>
-  .home-container {
-    display: grid;
-    grid-template-columns: 1fr 3fr 1fr;
-    gap: 2em;
-    height: 90vh;
-    width: 80vw;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .search-category {
-    display: flex;
-    align-items: center;
-
-  }
-
-  .categories {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    overflow-x: scroll;
-  }
-
-  .home-posts {
-    height: 90vh;
-  }
-
-  .all-posts {
-    height: 60%;
-    overflow: auto;
-  }
-
-  .all-posts::-webkit-scrollbar {
-    display: none;
-  }
-
-  #id_content {
-    display: block;
-    width: 100%;
-    height: 10vh;
-    border: 1px solid gray;
-    border-radius: 22px;
-    padding: 1.5em;
-  }
-
-  #id_category {
-    display: inline-block;
-    border-radius: 12px;
-  }
-  label {
-    display: block;
-  }
-  .post-input input {
-    display: inline-block;
-    border-radius: 12px;
-    
-  }
-
-  .post-input p {
-    display: block;
-  }
-/* 
-  .profile-view {
-    border: 1px solid black;
-  } */
-
-  .profile-view-info {
-    padding: 2rem;
-  }
-</style>
-
-<div class="home-container">
-  
-  <div class="recent_feed">
-    {% if request.user.is_authenticated %}
-    <h5>Your Network's Activity</h5>
-    {% endif %}
-  </div>
-  
-
-
-  <div class="home-posts">
-    {% if request.user.is_authenticated %}
-    <div class="post-input">
-      <form method="Post" action="">
-        {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit" value="Post">
-      </form>
-    </div>
-    {% else %}
-    <h5>Please sign in to post.</h5>
-    {% endif %}
-    <hr>
-
-    <div class="search-category">
-      <h5 style="margin-right: 10px;">View by Category</h5>
-      <form method="GET" action="{%url 'home' %}">
-        <input type="text" name="q" placeholder="search category"/>
-      </form>
+<div class="container text-center">
+  <div class="row">
+    <div class="col">
+      {% if request.user.is_authenticated %}
+      <h5>Your Network's Activity</h5>
+      {% endif %}
     </div>
 
-    <div class="categories">
-      <div class="category-item">
-        <a href="{% url 'home' %}">All</a>
+
+    <div class="col">
+      {% if request.user.is_authenticated %}
+      <div class="post-input">
+        <form method="Post" action="">
+          {% csrf_token %}
+          {{form.as_p}}
+          <input type="submit" value="Post">
+        </form>
       </div>
-      {% for category in categories %}
-      <div class="category-item">
-        <a href="{% url 'home' %}?q={{category.name}}">{{category.name}}</a>
-      </div>
-      {% endfor %}
-    </div>
-    <hr>
+      {% else %}
+      <h5>Please sign in to post.</h5>
+      {% endif %}
+      <hr>
 
-    <div class="all-posts">
-      
-      {% for post in posts %}
-        <div>
-          <a href="{% url 'profile' post.user_id %}">@{{post.user}}</a>
-          <a href="{% url 'view-post' post.id %}"><p>{{post.content}}</p></a>
-          <small>{{post.category}}</small>
-          <hr>
+      <div class="search-category">
+        <h5 style="margin-right: 10px;">View by Category</h5>
+        <form method="GET" action="{%url 'home' %}">
+          <input type="text" name="q" placeholder="search category"/>
+        </form>
+      </div>
+
+      <div class="categories">
+        <div class="category-item">
+          <a href="{% url 'home' %}">All</a>
         </div>
-    
-      {% endfor %}
+        <div class="">
+          {% for category in categories %}
+          <div class="category-item">
+            <a href="{% url 'home' %}?q={{category.name}}">{{category.name}}</a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <hr>
+
+      <div class="all-posts">
+        
+        {% for post in posts %}
+          <div>
+            <a href="{% url 'profile' post.user_id %}">@{{post.user}}</a>
+            <a href="{% url 'view-post' post.id %}"><p>{{post.content}}</p></a>
+            <small>{{post.category}}</small>
+            <hr>
+          </div>
       
+        {% endfor %}
+        
+      </div>
+    </div>
+
+
+    <div class="col">
+      
+      {% if request.user.is_authenticated %}
+      <img src={{request.user.profile.avatar.url}} style="height: 200px; width: 200px; object-fit: cover; border-radius: 50%;"/>
+      <div class="profile-view-info">
+        <a href="{% url 'profile' request.user.id%}">@{{request.user}}</a>
+        <h5>Connections: </h5>
+        <h5>Posts: {{post_count}}</h5>
+        <h5>Contributions: {{comment_count}}</h5>
+      </div>  
+      {% endif %}
     </div>
   </div>
-
-
-  <div class="profile-view">
-    
-    {% if request.user.is_authenticated %}
-    <img src={{request.user.profile.avatar.url}} style="height: 200px; width: 200px; object-fit: cover; border-radius: 50%;"/>
-    <div class="profile-view-info">
-      <a href="{% url 'profile' request.user.id%}">@{{request.user}}</a>
-      <h5>Connections: </h5>
-      <h5>Posts: {{post_count}}</h5>
-      <h5>Contributions: {{comment_count}}</h5>
-    </div>  
-    {% endif %}
-  </div>
-
 </div>
 
 

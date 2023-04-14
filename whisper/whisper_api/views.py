@@ -64,6 +64,10 @@ def register(request):
 def home(request):
   q = request.GET.get('q') if request.GET.get('q') != None else ''
   posts = Post.objects.filter(category__name__icontains=q)
+  comments = Comment.objects.all()
+  my_follows = Profile.objects.get(user=request.user.id)
+  print('MY FOLLOWS:', my_follows.id)
+
   categories = Category.objects.all()
   
   post_count = None
@@ -86,6 +90,7 @@ def home(request):
              'categories': categories,
              'post_count': post_count,
              'comment_count': comment_count,
+             'comments': comments,
              }
   
   return render(request, 'home.html', context)
@@ -161,7 +166,7 @@ def profile(request, pk):
   post_count = len(user.post_set.all())
   comment_count = len(user.comment_set.all())
   profile = Profile.objects.get(user_id=pk)
-  print("The PROFILE IS", profile)
+  print("The PROFILE IS", profile.avatar.url)
 
   if request.method == "POST":
     current_profile = request.user.profile

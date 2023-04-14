@@ -1,5 +1,4 @@
 from django.forms import ModelForm
-from django import forms
 from .models import Post, Profile
 
 class PostForm(ModelForm):
@@ -7,6 +6,10 @@ class PostForm(ModelForm):
     model = Post
     fields = '__all__'
     exclude = ['user', 'commented']
+    
+    # widgets = {
+    #   'content': form.TextInput
+    # }
 
 class UpdateProfileForm(ModelForm):
   class Meta:
