@@ -65,8 +65,8 @@ def home(request):
   q = request.GET.get('q') if request.GET.get('q') != None else ''
   posts = Post.objects.filter(category__name__icontains=q)
   comments = Comment.objects.all()
-  my_follows = Profile.objects.get(user=request.user.id)
-  print('MY FOLLOWS:', my_follows.id)
+  my_follows = Profile.objects.get(id=request.user.id).follows.all()
+  my_follows_ids = [x.id for x in my_follows]
 
   categories = Category.objects.all()
   
@@ -91,6 +91,7 @@ def home(request):
              'post_count': post_count,
              'comment_count': comment_count,
              'comments': comments,
+             'my_follows_ids': my_follows_ids,
              }
   
   return render(request, 'home.html', context)
@@ -166,8 +167,6 @@ def profile(request, pk):
   post_count = len(user.post_set.all())
   comment_count = len(user.comment_set.all())
   profile = Profile.objects.get(user_id=pk)
-  print("The PROFILE IS", profile.avatar.url)
-
   if request.method == "POST":
     current_profile = request.user.profile
     action = request.POST['follow']

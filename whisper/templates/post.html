@@ -2,52 +2,6 @@
 
 {% block content %}
 
-<style>
-
-  * {
-    margin: 0;
-    padding: 0;
-  }
-
-  .single-post {
-    display: grid;
-    grid-template-columns: 1fr 3fr 1fr;
-  }
-
-  .edit-delete {
-    display: flex;
-    justify-content: flex-end;
-    
-  }
-
-  .comment-container {
-    background-color: rgb(35, 35, 40);
-    color:rgb(200, 205, 197)
-  }
-
-  .comment {
-    margin-bottom: 15px;
-    margin-top: 5px;
-  }
-  .post-comments a{
-    color: rgb(200, 205, 197);
-    text-decoration: none;
-  }
-
-  .comment-meta {
-    display: flex;
-  }
-
-  .delete-comment {
-    opacity: 0.2;
-  }
-
-  .delete-comment:hover {
-    opacity: 0.8;
-    cursor: pointer;
-    transition: opacity 0.2s;
-  }
-</style>
 
 <div class="single-post">
   <div class="empty-left">

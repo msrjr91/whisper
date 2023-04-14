@@ -12,22 +12,16 @@
   </head>
   <body>
 
-      <nav class="navbar navbar-expand-lg bg-primary">
+      <nav class="navbar navbar-expand-lg  bg-primary text-white px-5 py-2" style="height: 5vh; color: white;">
           <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarcollapse">
               <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarcollapse">
-              <ul class="navbar-nav justify-content-between w-100">
-                  <li><a class="navbar-brand" href="/">Whisper</a></li>
-                  <li>
-                    <form class="d-flex" role="search">
-                      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                      <!-- <button class="btn btn-light" type="submit">Search</button> -->
-                    </form>
-                  </li>
+              <ul class="navbar-nav justify-content-between w-100" style="color: white; display: flex; align-items: center;">
+                  <li><a class="navbar-brand" href="/" style="color: white;">Whisper</a></li>
                   <li>
                     <div class="dropdown justify-content-end">
-                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">
                         Options
                       </a>
                       <ul class="dropdown-menu">
@@ -47,39 +41,6 @@
       </nav>
 
 
-
-<!-- 
-    <nav class="navbar navbar-expand-lg bg-primary">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/">Whisper</a>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-light" type="submit">Search</button>
-          </form>
-
-          <div class="dropdown justify-content-end">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Options
-            </a>
-            <ul class="dropdown-menu">
-              {% if request.user.is_authenticated %}
-              <li><a class="dropdown-item" href="">Connections</a></li>
-              <li><a class="dropdown-item" href="#">Messages</a></li>
-              <li><a class="dropdown-item" href="{% url 'profile' request.user.id %}">@{{request.user}}</a></li>
-              <li><a class="dropdown-item" href="{% url 'signout' %}">Logout</a></li>
-              {% else %}
-              <li><a class="dropdown-item" href="{% url 'signin' %}">Login</a></li>
-              {% endif %}
-            </ul>
-
-          </div>
-
-        </div>
-      </div>
-    </nav> -->
-
     {% if messages %}
     <ul class="messages">
       {% for message in messages %}
@@ -88,7 +49,7 @@
     </ul>
     {% endif %}
   
-    <div class="main-container">
+    <div class="main-container" style="height: 95vh; width: 100vw; background-color: rgb(255, 255, 255);">
     {% block content %}
   
     {% endblock %}

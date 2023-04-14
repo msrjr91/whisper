@@ -3,13 +3,13 @@
 {% block content %}
 
 
-<div class="container text-center">
-  <div class="row">
+<div class="container text-center" style="background-color: rgb(252, 243, 245); height: 100%;">
+  <div class="row" height: 60%;>
 
-    <div class="col">
+    <div class="col" style="margin-top: 2vh; height: 100%;">
       <div class="container text-center">
         <div class="container text-center">
-          <img src="{{profile.avatar.url}}" alt={{user.id}} style="height: 200px; width: 200px; object-fit: cover; border-radius: 50%;"/>
+          <img src="{{profile.avatar.url}}" alt={{user.id}} style="height: 200px; width: 200px; object-fit: cover; border: 1px solid black; border-radius: 50%;"/>
           <h4>@{{user.username}}</h4>
           <hr>
           <h5>Followers: {{profile.followed_by.all.count}}</h5>
@@ -39,31 +39,41 @@
       <br>
     </div>
 
-    <div class="col">
-      <div class="container text-start">
-        <h2>@{{user.username}}'s posts</h2>
-        <div class="all-posts">
+    <div class="col-6" style="margin-top: 2vh; height: 60%; background-color: blue; overflow: auto;">
+      <div class="container text-start" style="height: 100%;">
+        <div class="container text-center" style="height: 10%;">
+          <h2>@{{user.username}}'s posts</h2>
+        </div>
+        <div class="all-posts" style="height: 10%; overflow: auto;">
           {% for post in posts %}
-          <div class="profile-posts">
-            <small>@{{post.user.username}} -- {{post.created|timesince}} ago</small>
-            <a href="{% url 'view-post' post.id %}"><p>{{post.content}}</p></a>
-            <small>{{post.category}}</small>
-            <hr>
+          <div class="card" style="width: 100%;">
+            <div class="card-body">
+              <div class="container text-start">
+                <h6 class="card-subtitle mb-2 text-muted"><img src="{{post.user.profile.avatar.url}}" alt="" style="height: 50px; width: 50px; object-fit: cover; border-radius: 50%; margin-right: 10px;"><small>@{{post.user.username}} -- {{post.created|timesince}} ago</small></h6>
+                <p class="card-text"><a href="{% url 'view-post' post.id %}"><p>{{post.content}}</p></a></p>
+                <small class="card-text float-start">Comments: {{post.commented.count}}</small>
+                <a class="btn btn-primary btn-sm disabled float-end" role="button" aria-disabled="true">{{post.category}}</a>
+              </div>
+                          
+            </div>
           </div>
           {% endfor %}
         </div>
       </div>
     </div>
 
-    <div class="col">
+    <div class="col" style="margin-top: 2vh;">
       <div class="container text-start">
         <h2>@{{user.username}}'s followers</h2>
+        <br>
         <div class="followers-list">
           {% for following in profile.followed_by.all %}
             {% if following != profile %}
-              <!-- <img src="{{ following.avatar.url }}" alt="" style="height: 50px; width: 50px; object-fit: cover; border-radius: 50%;"/> -->
-              <a href="{% url 'profile' following.user.id %}"><img src="{{ following.avatar.url }}" alt="" style="height: 50px; width: 50px; object-fit: cover; border-radius: 50%;"/> @{{ following }}</a><br>
-              <hr>
+            <div class="container text-start" style="margin: 0;">
+              <img src="{{ following.avatar.url }}" alt="" style="height: 50px; width: 50px; object-fit: cover; filter: drop-shadow(0px 1px 3px black); border-radius: 50%; margin-right: 20x;"/>
+              <a href="{% url 'profile' following.user.id %}" style="margin-left: 10px;"><small>@{{ following }}</small></a>
+            </div>
+            <hr>
             {% endif %}
           {% endfor %}
         </div>
