@@ -4,17 +4,19 @@
 
 
 <div class="container text-center" style="background-color: rgb(252, 243, 245); height: 100%;">
-  <div class="row" height: 60%;>
+  <div class="row" style="height: 100%;"">
 
     <div class="col" style="margin-top: 2vh; height: 100%;">
       <div class="container text-center">
         <div class="container text-center">
+          {% if request.user.is_authenticated %}
           <img src="{{profile.avatar.url}}" alt={{user.id}} style="height: 200px; width: 200px; object-fit: cover; border: 1px solid black; border-radius: 50%;"/>
           <h4>@{{user.username}}</h4>
           <hr>
           <h5>Followers: {{profile.followed_by.all.count}}</h5>
           <h5>Posts: {{post_count}}</h5>
           <h5>Contributions: {{comment_count}}</h5>
+          {% endif %}
           {% if profile.id == request.user.id %}
           <a href="{% url 'update-profile' request.user.id %}">Update Profile</a>
           {% endif %}
@@ -39,12 +41,12 @@
       <br>
     </div>
 
-    <div class="col-6" style="margin-top: 2vh; height: 60%; background-color: blue; overflow: auto;">
+    <div class="col-6" style="margin-top: 2vh; height: 98%; background-color: rgb(228, 228, 254); overflow: auto;">
       <div class="container text-start" style="height: 100%;">
-        <div class="container text-center" style="height: 10%;">
-          <h2>@{{user.username}}'s posts</h2>
+        <div class="container text-center"">
+          <h2>Your Posts</h2>
         </div>
-        <div class="all-posts" style="height: 10%; overflow: auto;">
+        <div class="all-posts" style="height: 100%; overflow: auto;">
           {% for post in posts %}
           <div class="card" style="width: 100%;">
             <div class="card-body">

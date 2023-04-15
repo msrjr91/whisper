@@ -65,8 +65,11 @@ def home(request):
   q = request.GET.get('q') if request.GET.get('q') != None else ''
   posts = Post.objects.filter(category__name__icontains=q)
   comments = Comment.objects.all()
-  my_follows = Profile.objects.get(id=request.user.id).follows.all()
-  my_follows_ids = [x.id for x in my_follows]
+  my_follows = None
+  my_follows_ids = None
+  if request.user.is_authenticated:
+    my_follows = Profile.objects.get(id=request.user.id).follows.all()
+    my_follows_ids = [x.id for x in my_follows]
 
   categories = Category.objects.all()
   
