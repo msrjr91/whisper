@@ -48,7 +48,7 @@ class Profile(models.Model):
                                    related_name='followed_by',
                                    symmetrical=False,
                                    blank=True)
-  avatar = models.ImageField(null=True, default="Whisper/files/covers/default-avatar-profile-icon-of-social-media-user-vector.jpg")
+  avatar = models.ImageField(null=True, default="Whisper/files/covers/default-avatar-profile-icon-of-social-media-user-vector.jpg", upload_to='whisper/static/images')
   
   
   def __str__(self):

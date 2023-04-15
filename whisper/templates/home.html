@@ -15,11 +15,12 @@
 <div class="container text-center" style="background-color: rgb(252, 243, 245); width: 80%; height: 100%;">
   <div class="row" style="height: 100%;">
 
-    <div class="col" style="height: 97%; overflow: auto; margin-top: 2%;">
+    <!-- <div class="col" style="height: 97%; overflow: auto; margin-top: 2%;">
       {% if request.user.is_authenticated %}
       <div class="left-third" style="height: 100%;">
         
         <h5>People you follow</h5>
+        {% if comments %}
           {% for comment in comments %}
             {% if comment.user_id in my_follows_ids %}
             <div class="container text-center">
@@ -41,14 +42,14 @@
             </div>  
             {% endif %}
           {% endfor %}
-       
+        {% endif %}
       </div>
       {% else %}
       <div class="left-third" style="height: 100%;">
         <h5>Recent Activity</h5>
       </div>
       {% endif %}
-    </div>
+    </div> -->
 
 
     <div class="col-6" style="margin-top: 2%; height: 98%;">
@@ -103,7 +104,7 @@
     </div>
 
 
-    <div class="col" style=" height: 100%; margin-top: 2vh;">
+    <!-- <div class="col" style=" height: 100%; margin-top: 2vh;">
       {% if request.user.is_authenticated %}
       <div class="right-third">
         <h5>Your Profile</h5>
@@ -129,7 +130,7 @@
         <h5>Top Contributors</h5>
       </div>
       {% endif %}
-    </div>
+    </div> -->
 
   </div>
 </div>
@@ -138,6 +139,7 @@
   <img src="https://healthyframework.com/wp-content/uploads/2020/10/People-in-their-30s.jpg" alt="" style="width: 100vw; height: 100vh; object-fit: cover;">
   <div class="center-text" style="position: absolute; top: 25%; left: 50%; transform: translate(-50%, -50%)">
     <h1>What's on your mind?</h1>
+    <a href="{% url 'signin' %}" class="btn btn-dark btn-lg" role="button" aria-disabled="true">Join Whisper</a>
   </div>
 </div>
 

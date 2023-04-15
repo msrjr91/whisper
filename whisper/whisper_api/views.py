@@ -52,7 +52,7 @@ def register(request):
       user.username = user.username.lower()
       user.save()
       login(request, user)
-      return redirect('home')
+      # return redirect('home')
     else:
       messages.error(request, 'Registration failed')
     
@@ -65,13 +65,17 @@ def home(request):
   q = request.GET.get('q') if request.GET.get('q') != None else ''
   posts = Post.objects.filter(category__name__icontains=q)
   comments = Comment.objects.all()
-  my_follows = None
-  my_follows_ids = None
-  if request.user.is_authenticated:
-    my_follows = Profile.objects.get(id=request.user.id).follows.all()
-    my_follows_ids = [x.id for x in my_follows]
-
+  print(request.user.id)
+  # my_follows = None
+  # my_follows = Profile.objects.get(id=request.user.id)
+  # my_follows_ids = None
+  # if request.user.is_authenticated:
+  #   my_follows = Profile.objects.get(id=request.user.id).follows.all()
+  #   my_follows_ids = [x.id for x in my_follows]
+  # print("MY FOLLOWS: ", my_follows)
+  # print("MY FOLLOWS IDS:", my_follows_ids)
   categories = Category.objects.all()
+  # print('FOLLOWS:', my_follows)
   
   post_count = None
   comment_count = None
@@ -94,7 +98,7 @@ def home(request):
              'post_count': post_count,
              'comment_count': comment_count,
              'comments': comments,
-             'my_follows_ids': my_follows_ids,
+            #  'my_follows_ids': my_follows_ids,
              }
   
   return render(request, 'home.html', context)
