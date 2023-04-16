@@ -52,7 +52,7 @@ def register(request):
       user.username = user.username.lower()
       user.save()
       login(request, user)
-      # return redirect('home')
+      return redirect('home')
     else:
       messages.error(request, 'Registration failed')
     
@@ -65,17 +65,13 @@ def home(request):
   q = request.GET.get('q') if request.GET.get('q') != None else ''
   posts = Post.objects.filter(category__name__icontains=q)
   comments = Comment.objects.all()
-  print(request.user.id)
-  # my_follows = None
-  # my_follows = Profile.objects.get(id=request.user.id)
-  # my_follows_ids = None
-  # if request.user.is_authenticated:
-  #   my_follows = Profile.objects.get(id=request.user.id).follows.all()
-  #   my_follows_ids = [x.id for x in my_follows]
-  # print("MY FOLLOWS: ", my_follows)
-  # print("MY FOLLOWS IDS:", my_follows_ids)
   categories = Category.objects.all()
-  # print('FOLLOWS:', my_follows)
+
+  my_follows = None
+  my_follows_ids = None
+  if request.user.is_authenticated and request.user.profile.follows:
+    my_follows = Profile.objects.get(id=request.user.id).follows.all()
+    my_follows_ids = [x.id for x in my_follows]
   
   post_count = None
   comment_count = None
@@ -98,7 +94,7 @@ def home(request):
              'post_count': post_count,
              'comment_count': comment_count,
              'comments': comments,
-            #  'my_follows_ids': my_follows_ids,
+             'my_follows_ids': my_follows_ids,
              }
   
   return render(request, 'home.html', context)
@@ -168,12 +164,16 @@ def deletePost(request, pk):
 
 
 def profile(request, pk):
+  print("CURRENT USER: ",request.user.id)
   user = User.objects.get(id=pk)
-  # profile('USER IS: ', user.id)
   posts = user.post_set.all()
   post_count = len(user.post_set.all())
   comment_count = len(user.comment_set.all())
   profile = Profile.objects.get(user_id=pk)
+  print("PROFILE ID: ", profile.id)
+  print("AVATAR PATH:", profile.avatar)
+  if profile.avatar.url:
+    print('HAS AVATAR', profile.avatar.url)
   if request.method == "POST":
     current_profile = request.user.profile
     action = request.POST['follow']
