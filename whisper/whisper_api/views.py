@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
-from .forms import PostForm, UpdateProfileForm 
+from .forms import PostForm, UpdateProfileForm, RegisterUserForm
 from collections import defaultdict
 from django.template.defaulttags import register
 
@@ -45,10 +45,10 @@ def signout(request):
 
 def register(request):
   page = 'register'
-  form = UserCreationForm()
+  form = RegisterUserForm()
   
   if request.method == 'POST':
-    form = UserCreationForm(request.POST)
+    form = RegisterUserForm(request.POST)
     if form.is_valid():
       user = form.save(commit=False)
       user.username = user.username.lower()
@@ -216,3 +216,16 @@ def frequencies(lst):
   for val in lst:
     freq[val] += 1
   return dict(freq) 
+
+
+def searchUser(request):
+  results = None
+  if request.method == 'POST':
+    searched = request.POST['user-search']
+    results = User.objects.filter(username__contains=searched)
+      
+  context = {
+             'searched': searched,
+             'results': results,
+             }
+  return render(request, 'searchUser.html', context)

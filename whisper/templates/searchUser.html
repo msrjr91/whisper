@@ -1,0 +1,55 @@
+{% extends 'main.html' %}
+
+
+{% block content %}
+
+  {% if searched %}
+  <div class="card" style="background-color: rgb(255, 247, 248); width: 50%; margin-left: auto; margin-right: auto; margin-top: 5vh;">
+    
+    {% if results %}
+    <h5 class="card-header bg-primary">Search Results for "{{searched}}" <small class="card-subtitle" style="display: block;">{{results.count}} results</small></h5>
+      {% for result in results %}
+    <div class="card-body">
+      {% if request.user.is_authenticated %}
+      <form method="POST" action="" style="display: in">
+        {% csrf_token %}
+        {% if result.id != request.user.id %}
+          {% if result.profile in request.user.profile.follows.all %}
+            <input class="btn btn-secondary btn-sm float-end" name="unfollow" value="Unfollow" type="submit" disabled>
+            </input>
+          {% else %}
+            <input class="btn btn-primary btn-sm float-end" name="follow" value="Follow" type="submit" disabled>
+            
+            </input>
+          {% endif %}
+        {% endif %}
+      </form>
+      {% endif %}
+      <img src="{{result.profile.avatar.url}}" alt="" style="height: 50px; width: 50px; object-fit: cover; border: 1px solid black;border-radius: 50%; margin-right: 10px;">
+      <p class="card-subtitle" style="display: inline"><a href="{% url 'profile' result.id %}">@{{result}}</a></p>
+
+      <!-- <a href="#" class="btn btn-primary btn-sm" style="display: block'">Follow</a> -->
+      <hr>
+    </div>
+    
+      {% endfor %}
+    {% else %}
+    <div class="card" style="width: 50%">
+      <div class="card-body">
+        <h5 class="card-title">No results</h5>
+        <a href="/">Back</a>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+  {% else %}
+  <div class="card" style="width: 50%">
+    <div class="card-body">
+      <h5 class="card-title">No search query</h5>
+      <a href="/">Back</a>
+    </div>
+  </div>
+  {% endif %}
+
+
+{% endblock content %}

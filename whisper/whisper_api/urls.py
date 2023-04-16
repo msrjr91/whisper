@@ -13,7 +13,8 @@ urlpatterns = [
   path('updatepost/<str:pk>/', views.editPost, name='edit-post'),
   path('deletepost/<str:pk>/', views.deletePost, name='delete-post'),
   path('deletecomment/<str:pk>/', views.deleteComment, name='delete-comment'),
-  path('updateprofile/<str:pk>/', views.updateProfile, name='update-profile')
+  path('updateprofile/<str:pk>/', views.updateProfile, name='update-profile'),
+  path('searchuser/', views.searchUser, name='search-user'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
