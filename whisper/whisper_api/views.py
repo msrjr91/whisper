@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from .forms import PostForm, UpdateProfileForm 
+from collections import defaultdict
+from django.template.defaulttags import register
 
 # Create your views here.
 def signin(request):
@@ -167,13 +169,13 @@ def profile(request, pk):
   print("CURRENT USER: ",request.user.id)
   user = User.objects.get(id=pk)
   posts = user.post_set.all()
+  comments = Comment.objects.all()
+  all_comments = [comment.post.id for comment in comments]
+  post_comment_count = frequencies(all_comments)  
   post_count = len(user.post_set.all())
   comment_count = len(user.comment_set.all())
   profile = Profile.objects.get(user_id=pk)
-  print("PROFILE ID: ", profile.id)
-  print("AVATAR PATH:", profile.avatar)
-  if profile.avatar.url:
-    print('HAS AVATAR', profile.avatar.url)
+
   if request.method == "POST":
     current_profile = request.user.profile
     action = request.POST['follow']
@@ -187,7 +189,8 @@ def profile(request, pk):
              'posts': posts,
              'post_count': post_count,
              'comment_count': comment_count,
-             'profile': profile}
+             'profile': profile,
+             'post_comment_count': post_comment_count}
   return render(request, 'profile.html', context)
 
 @login_required
@@ -206,3 +209,10 @@ def updateProfile(request, pk):
   context = {'form': form,
              'profile': profile}
   return render(request, 'update_profile.html', context)
+
+
+def frequencies(lst):
+  freq = defaultdict(int)
+  for val in lst:
+    freq[val] += 1
+  return dict(freq) 

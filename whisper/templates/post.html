@@ -1,58 +1,91 @@
 {% extends 'main.html' %}
 
 {% block content %}
+<style>
+  div::-webkit-scrollbar {
+      display: none;
+  }
+</style>
 
+<div class="container text-center" style="background-color: rgb(255, 255, 255); height: 100%;">
+  <div class="row" style="height: 100%;">
+    <div class="col-8" style="height: 100%; overflow: auto;">
 
-<div class="single-post">
-  <div class="empty-left">
-  </div>
-  <div class="all-comments">
-    <div class="this-post">
-      <h4>@{{post.user}}</h4>
-      <p class="comment">{{post.content}}</p>
+      <div class="card" style="width: 75%; margin-left: auto; margin-right: auto; height: 15%; margin-top: 5%;">
+        <div class="card-body">
+          <img src="{{post.user.profile.avatar.url}}" alt="" style="height: 50px; width: 50px; object-fit: cover; border-radius: 50%; float: left; margin-right: 15px;">
+          <div class="container text-start">
+            <h6 class="card-title">@{{post.user}} <small class="card-subtitle">Posted {{post.created|timesince}} ago</small></h6>
+            <p class="card-text">{{post.content}}</p>
+            {% if request.user == post.user %}
+            <div class="container text-end">
+              <small class="card-text">{{post.created}}</small>
+              <a class="card-link" href="{% url 'edit-post' post.id %}"><small>Edit</small></a>
+              <a class="card-link" href="{% url 'delete-post' post.id %}" style="margin-left: 5px;"><small>Delete</small></a>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <br>
+      {% if request.user.is_authenticated %}
+      <div class="post-comment" style="height: 10%;">
+        <form method="POST" action="">
+          {% csrf_token %}
+          <input class="form-control form-control-lg" name="comment-body" type="text" placeholder="Type your response" aria-label=".form-control-lg example" style="width: 75%; margin-right: auto; margin-left: auto; padding: 1rem; border-radius: 0;">
+        </form>
+      </div>
+      {% else %}
+      <div class="post-comment" style="height: 10%;">
+        <input class="form-control" type="text" placeholder="Login to reply" aria-label="Disabled input example" disabled>
+      </div>
+      {% endif %}
+      <br>
+      <div class="container text-center" style="height: 65%; border: 1px solid rgb(233, 233, 233); width : 75%;">
+        {% for comment in comments %}
+        <div class="card" style="width: 100%; margin-left: auto; margin-right: auto; border: none; border-radius: 0;">
+          <div class="card-body">
+            <img src="{{comment.user.profile.avatar.url}}" alt="" style="height: 50px; width: 50px; object-fit: cover; border-radius: 50%; float: left; margin-right: 15px;">
+            <div class="container text-start">
+              <small class="card-subtitle">@{{comment.user}} commented - {{post.created|timesince}} ago - replying to @{{post.user}}</small>
+              <p class="card-text">{{comment.content}}</p>
+              <div class="container text-end">
+                <small style="margin-right: 15px;"></small>
+                {% if request.user == comment.user %}
+                <a href="{% url 'delete-comment' comment.id %}" class="delete-comment">Delete</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
     </div>
-    {% if request.user == post.user %}
-    <div class="edit-delete">
-      <a href="{% url 'edit-post' post.id %}"><small>Edit</small></a>
-      <a href="{% url 'delete-post' post.id %}" style="margin-left: 5px;"><small>Delete</small></a>
-    </div>
-    {% endif %}
-    <hr>
 
-    {% if request.user.is_authenticated %}
-    <div class="post-comment">
-      <form method="POST" action="">
-        {% csrf_token %}
-        <input type="text" name="comment-body" placeholder="Type your response"/>
-      </form>
-    </div>
-    {% endif %}
-
-    
-    <div class="comment-container">
-      {% for comment in comments %}
-      <div class="post-comments">
-        <h5>@{{comment.user}} -- {{comment.created|timesince}}</h5>
-        <div class="comment-meta">
-          <small style="margin-right: 15px;">Replying to @{{post.user}}</small>
-          {% if request.user == comment.user %}
-          <a href="{% url 'delete-comment' comment.id %}" class="delete-comment">Delete</a>
+    <div class="col-2" style="height: 100%; overflow: auto;">
+      <div class="empty-right" style="height: 100%;">
+        <h5>In this post</h5>
+        <br>
+        
+        <div class="card">
+          {% if commented %}
+          <ul class="list-group list-group-flush">
+            {% for commenter in commented %}
+            <li class="list-group-item"><a href="{% url 'profile' commenter.profile.id%}"><img src="{{commenter.profile.avatar.url}}" alt="" style="height: 50px; width: 50px; object-fit: cover; border-radius: 50%; float: left; margin-right: 15px;"><small>@{{commenter}}</small></a></li>
+            {% endfor %}
+          </ul>
           {% endif %}
         </div>
-        <p class="comment">{{comment.content}}</p>
+
       </div>
-      {% endfor %}
     </div>
 
   </div>
-  <div class="empty-right">
-    {% for commenter in commented %}
-      <div class="post-users">
-        <h5>@{{commenter}}</h5>
-      </div>
-    {% endfor %}
-  </div>
+  
+    
+
 </div>
+
 
 
 {% endblock %}

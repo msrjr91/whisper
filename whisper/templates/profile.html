@@ -11,11 +11,12 @@
         <div class="container text-center">
           {% if request.user.is_authenticated %}
           <img src="{{profile.avatar.url}}" alt={{user.id}} style="height: 200px; width: 200px; object-fit: cover; border: 1px solid black; border-radius: 50%;"/>
-          <h4>@{{user.username}}</h4>
+          <br>
+          <h5 style="margin-top: 5vh;">@{{user.username}}</h5>
           <hr>
-          <h5>Followers: {{profile.followed_by.all.count}}</h5>
-          <h5>Posts: {{post_count}}</h5>
-          <h5>Contributions: {{comment_count}}</h5>
+          <h6>Followers: {{profile.followed_by.all.count}}</h6>
+          <h6>Posts: {{post_count}}</h6>
+          <h6>Contributions: {{comment_count}}</h6>
           {% endif %}
           {% if profile.id == request.user.id %}
           <a href="{% url 'update-profile' request.user.id %}">Update Profile</a>
@@ -41,7 +42,7 @@
       <br>
     </div>
 
-    <div class="col-6" style="margin-top: 2vh; height: 98%; background-color: rgb(228, 228, 254); overflow: auto;">
+    <div class="col-6" style="margin-top: 2vh; height: 98%; background-color: rgb(244, 244, 253); overflow: auto;">
       <div class="container text-start" style="height: 100%;">
         <div class="container text-center"">
           <h2>Posts</h2>
@@ -53,7 +54,17 @@
               <div class="container text-start">
                 <h6 class="card-subtitle mb-2 text-muted"><img src="{{post.user.profile.avatar.url}}" alt="" style="height: 50px; width: 50px; object-fit: cover; border-radius: 50%; margin-right: 10px;"><small>@{{post.user.username}} -- {{post.created|timesince}} ago</small></h6>
                 <p class="card-text"><a href="{% url 'view-post' post.id %}"><p>{{post.content}}</p></a></p>
-                <small class="card-text float-start">Comments: {{post.commented.count}}</small>
+                <small class="card-text float-start">Contributors: {{ post.commented.count }} &nbsp;</small>
+
+            
+                {% if post.id in post_comment_count %} 
+                  <small class="card-text float-start">Comments: {{ post_comment_count.post.id }}</small>
+                {% else %}
+                  <small class="card-text float-start">Comments: 0</small>
+                {% endif %}
+
+
+
                 <a class="btn btn-primary btn-sm disabled float-end" role="button" aria-disabled="true">{{post.category}}</a>
               </div>
                           

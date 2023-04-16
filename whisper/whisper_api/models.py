@@ -18,7 +18,7 @@ class Post(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)
   content = models.TextField(max_length=255)
   commented = models.ManyToManyField(User, related_name='commenters', blank=True)
-  category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+  category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
   created = models.DateTimeField(auto_now_add=True)
   updated = models.DateTimeField(auto_now=True)
   
