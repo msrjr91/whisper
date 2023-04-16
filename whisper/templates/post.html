@@ -11,7 +11,7 @@
   <div class="row" style="height: 100%;">
     <div class="col-8" style="height: 100%; overflow: auto;">
 
-      <div class="card" style="width: 75%; margin-left: auto; margin-right: auto; height: 15%; margin-top: 5%;">
+      <div class="card" style="width: 75%; margin-left: auto; margin-right: auto; height: 15%; margin-top: 5%; border: 1px solid rgb(233, 233, 233); border-radius: 0;">
         <div class="card-body">
           <img src="{{post.user.profile.avatar.url}}" alt="" style="height: 50px; width: 50px; object-fit: cover; border-radius: 50%; float: left; margin-right: 15px;">
           <div class="container text-start">
@@ -29,10 +29,14 @@
       </div>
       <br>
       {% if request.user.is_authenticated %}
-      <div class="post-comment" style="height: 10%;">
+      <div class="container text-center" style="height: 10%; width:75%; border: 1px solid rgb(233, 233, 233);">
+        <div class="container text-start" style="padding-left: 1rem;">
+          <small>replying to @{{post.user}}...</small>
+        </div>
+        
         <form method="POST" action="">
           {% csrf_token %}
-          <input class="form-control form-control-lg" name="comment-body" type="text" placeholder="Type your response" aria-label=".form-control-lg example" style="width: 75%; margin-right: auto; margin-left: auto; padding: 1rem; border-radius: 0;">
+          <input class="form-control form-control-lg" name="comment-body" type="text" placeholder="Type your response" aria-label=".form-control-lg example" style="width: 100%; margin-right: auto; margin-left: auto; padding: 1rem; border: none; border-radius: 0;">
         </form>
       </div>
       {% else %}
@@ -47,7 +51,7 @@
           <div class="card-body">
             <img src="{{comment.user.profile.avatar.url}}" alt="" style="height: 50px; width: 50px; object-fit: cover; border-radius: 50%; float: left; margin-right: 15px;">
             <div class="container text-start">
-              <small class="card-subtitle">@{{comment.user}} commented - {{post.created|timesince}} ago - replying to @{{post.user}}</small>
+              <small class="card-subtitle">@{{comment.user}} commented - {{post.created|timesince}} ago</small>
               <p class="card-text">{{comment.content}}</p>
               <div class="container text-end">
                 <small style="margin-right: 15px;"></small>
@@ -62,12 +66,11 @@
       </div>
     </div>
 
-    <div class="col-2" style="height: 100%; overflow: auto;">
-      <div class="empty-right" style="height: 100%;">
-        <h5>In this post</h5>
-        <br>
-        
-        <div class="card">
+    <div class="col-4" style="height: 100%; overflow: auto;">
+      <div class="empty-right" style="height: 100%; margin-top: 5%">
+              
+        <div class="card" style="width: 75%; margin-left: auto; margin-right: auto; margin-top: 10%;">
+          <h5 class="card-subtitle" style="padding: 1rem;">In this post</h5>  
           {% if commented %}
           <ul class="list-group list-group-flush">
             {% for commenter in commented %}
