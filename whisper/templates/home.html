@@ -119,10 +119,13 @@
               <h6>Contributions: {{comment_count}}</h6>
             </div>
           </div>
-          <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="finder user" aria-label="Search">
-            <button class="btn btn-light" type="submit">Search</button>
+
+          <form class="d-flex" role="search" method="POST" action="{% url 'search-user' %}">
+            {% csrf_token %}
+            <input class="form-control me-2" type="search" placeholder="finder user" aria-label="Search" name="user-search">
+            <button class="btn btn-primary opacity-75" onmouseout="this.style.opacity = '0.75'" onmouseover="this.style.opacity = '1'" type="submit">Search</button>
           </form>
+
         </div>  
       </div>
       {% else %}
