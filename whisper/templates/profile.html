@@ -11,16 +11,19 @@
         <div class="container text-center">
           {% if request.user.is_authenticated %}
           <img src="{{profile.avatar.url}}" alt={{user.id}} style="height: 200px; width: 200px; object-fit: cover; border: 1px solid black; border-radius: 50%;"/>
-          <br>
-          <h5 style="margin-top: 5vh;">@{{user.username}}</h5>
-          <hr>
-          <h6>Followers: {{profile.followed_by.all.count}}</h6>
-          <h6>Posts: {{post_count}}</h6>
-          <h6>Contributions: {{comment_count}}</h6>
-          {% endif %}
           {% if profile.id == request.user.id %}
-          <a href="{% url 'update-profile' request.user.id %}">Update Profile</a>
+          <br>
+          <a href="{% url 'update-profile' request.user.id %}" style="display: block;"><small>Update Profile Pic</small></a>
           {% endif %}
+          <h6 style="margin-top: 5vh;">@{{user.username}}</h6>
+          <hr>
+          <div class="container text-start">
+            <p>Followers: {{profile.followed_by.all.count}}</p>
+            <p>Posts: {{post_count}}</p>
+            <p>Contributions: {{comment_count}}</p>
+          </div>
+          {% endif %}
+
         </div>
       </div>
       {% if request.user.is_authenticated %}
@@ -75,11 +78,14 @@
       </div>
     </div>
 
-    <div class="col" style="margin-top: 2vh;">
-      <div class="container text-start">
-        <h2>@{{user.username}}'s followers</h2>
+    <div class="col" style="margin-top: 2vh; height: 98%;">
+      <div class="container text-start" style="height: 100%;">
+        <div class="container text-start" style="height: 5%;">
+          <h5>@{{user.username}}'s followers</h5>
+          <small>Follower Count: {{profile.followed_by.all.count}}</small>
+        </div>
         <br>
-        <div class="followers-list">
+        <div class="followers-list" style="height: 90%; overflow: auto;"">
           {% for following in profile.followed_by.all %}
             {% if following != profile %}
             <div class="container text-start" style="margin: 0;">

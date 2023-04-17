@@ -28,13 +28,13 @@
       
                   <div class="card" style="width: 17rem;">
                     <div class="card-body">
-                      <h6 class="card-subtitle" style="display: block;"><img src="{{comment.user.profile.avatar.url}}" alt="" style="height: 50px; width: 50px; object-fit: cover; border-radius: 50%; float: left; margin-right: 5px;"/> @{{ comment.user }} commented on:</h6>
+                      <h6 class="card-subtitle" style="display: block;"><img src="{{comment.user.profile.avatar.url}}" alt="" style="height: 50px; width: 50px; object-fit: cover; border-radius: 50%; float: left; margin-right: 5px;"/><small>@{{ comment.user }} commented on:</small></h6>
                       <br>
                       <div class="container text-center">
-                        <p class="card-text text-truncate" style="display: block;">"{{ comment.post }}"</p>                  
+                        <small class="card-text text-truncate" style="display: block;"><a href="{% url 'view-post' comment.post.id %}">"{{ comment.post }}"</a></small>                  
                       </div>
                       <br>
-                      <p class="card-text bg-primary" style="display: block; color: white; border-radius: 4px; padding: 4px">"{{ comment.content }}"</p>
+                      <p class="card-text bg-primary bg-gradient" style="display: block; color: white; border-radius: 4px; padding: 4px"><small>"{{ comment.content }}"</small></p>
                     </div>
                   </div>
 
@@ -55,13 +55,13 @@
     <div class="col-6" style="margin-top: 2%; height: 98%;">
       {% if request.user.is_authenticated %}
       <div class="one-third" style="height: 25%;">
-        <h4>What's on your mind?</h4>
+        <h5>Your Feed</h5>
         <div class="post-input">
           <form method="Post" action="">
             {% csrf_token %}
             {{form.as_p}}
             <div class="d-grid gap-2">
-              <input class="btn btn-primary" type="submit" value="Whisper!">
+              <input class="btn btn-primary" type="submit" value="Post">
             </div>
             
           </form>
@@ -106,37 +106,67 @@
 
     <div class="col" style=" height: 100%; margin-top: 2vh;">
       {% if request.user.is_authenticated %}
-      <div class="right-third">
-        <h5>Your Profile</h5>
-        <img src={{request.user.profile.avatar.url}} style="height: 200px; width: 200px; object-fit: cover; border: 1px solid black;border-radius: 50%;"/>
-        <div class="profile-view-info">
-          <a href="{% url 'profile' request.user.id%}">@{{request.user}}</a>
-          <div class="container text-center">
-            <br>
-            <div class="container text-start">
-              <h6>Followers: {{request.user.profile.followed_by.all.count}}</h6>
-              <h6>Posts: {{post_count}}</h6>
-              <h6>Contributions: {{comment_count}}</h6>
+      <div class="right-third" style="height: 100%;">
+        <div class="container text-center" style="height: 5%;">
+          <h5 style="margin: 0;">Your Profile</h5>
+        </div>
+        <div class="card" style="height: 40%; padding: 1em;">
+
+          <img src={{request.user.profile.avatar.url}} style="height: 180px; width: 180px; object-fit: cover; border: 1px solid black;border-radius: 50%; margin-left: auto; margin-right: auto;"/>
+          <br>
+          <div class="profile-view-info">
+            <a href="{% url 'profile' request.user.id%}">@{{request.user}}</a>
+            <div class="container text-center">
+              <br>
+              <div class="container text-start">
+                <small style="display: block;">Followers: {{request.user.profile.followed_by.all.count}}</small style="display: block;">
+                <small style="display: block;">Posts: {{post_count}}</small style="display: block;">
+                <small style="display: block;">Contributions: {{comment_count}}</small style="display: block;">
+              </div>
             </div>
-          </div>
+        </div>
+        </div>
+        <br>
+        <div class="search">
+          <small style="display: block;">Search User</small>
 
           <form class="d-flex" role="search" method="POST" action="{% url 'search-user' %}">
             {% csrf_token %}
-            <input class="form-control me-2" type="search" placeholder="finder user" aria-label="Search" name="user-search">
-            <button class="btn btn-primary opacity-75" onmouseout="this.style.opacity = '0.75'" onmouseover="this.style.opacity = '1'" type="submit">Search</button>
+            <input class="form-control me-2" type="search" placeholder="find user" aria-label="Search" name="user-search" style="display: block;">
           </form>
+        </div>
+        <br>
+        <div class="container text-start" style="height: 40%; width: 100%;">
+          <div class="card" style="background-color: rgb(255, 247, 248); width: 100%; height: 100%; margin-left: auto; margin-right: auto; overflow: auto;">
+            <div class="container text-center" style="width: 100%;">
+              <h6 class="card-header bg-light" style="width: 100%;">Suggested Connections</h6>
+            </div>
+            {% for user in all_users %}
+              {% if user.profile.followed_by.all.count > 3 and user.id != request.user.id %}
+              <div class="card-body" style="width: 100%;">
+                <div class="container text-left">
+                  <p class="card-subtitle"><img src="{{user.profile.avatar.url}}" alt="" style="height: 50px; width: 50px; object-fit: cover; border: 1px solid black;border-radius: 50%; margin-right: 20px;"><a href="{% url 'profile' user.id %}">@{{user}}</a></p>
+                </div>
+              </div>
+              <hr>
+              {% endif %}
+            {% endfor %}
+          </div>  
+        </div>
 
-        </div>  
-      </div>
-      {% else %}
-      <div class="right-third" style="height: 100%;">
-        <h5>Top Contributors</h5>
-      </div>
-      {% endif %}
+      </div>  
     </div>
-
+    {% else %}
+    <div class="right-third" style="height: 100%;">
+      <h5>Top Contributors</h5>
+    </div>
+    {% endif %}
   </div>
+
 </div>
+
+
+
 {% else %}
 <div class="wallpaper-container" style="position: relative; text-align: center; color: rgb(94, 94, 94); font-weight: bold;">
   <img class="img-fluid" src="https://healthyframework.com/wp-content/uploads/2020/10/People-in-their-30s.jpg" alt="" style="width: 100vw; height: 100vh; object-fit: cover;">

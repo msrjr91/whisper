@@ -68,13 +68,22 @@ def home(request):
   posts = Post.objects.filter(category__name__icontains=q)
   comments = Comment.objects.all()
   categories = Category.objects.all()
-
+  all_users = User.objects.all()
+  
   my_follows = None
   my_follows_ids = None
   if request.user.is_authenticated and request.user.profile.follows:
     my_follows = Profile.objects.get(id=request.user.id).follows.all()
     my_follows_ids = [x.id for x in my_follows]
+    
+  print(my_follows)
+  recommended = []
+  for user in all_users:
+    if user not in my_follows:
+      recommended.append(user.username)
   
+  print('RECOMMENDED', recommended)
+    
   post_count = None
   comment_count = None
   if request.user.is_authenticated:
@@ -96,7 +105,9 @@ def home(request):
              'post_count': post_count,
              'comment_count': comment_count,
              'comments': comments,
+             'my_follows': my_follows,
              'my_follows_ids': my_follows_ids,
+             'all_users': all_users,
              }
   
   return render(request, 'home.html', context)
@@ -195,11 +206,12 @@ def profile(request, pk):
 
 @login_required
 def updateProfile(request, pk):
-  user = request.user
-  profile = Profile.objects.get(user_id=pk)
-  form = UpdateProfileForm(instance=user)
+  user = User.objects.get(id=request.user.id)
+  profile = Profile.objects.get(user__id=request.user.id)
+  
+  form = UpdateProfileForm(request.POST or None, request.FILES or None, instance=profile)    
   if request.POST:
-    form = UpdateProfileForm(request.POST, request.FILES, instance=user)
+    form = UpdateProfileForm(request.POST or None, request.FILES or None, instance=profile)    
     print("THE REQUEST:", request.FILES)
     if form.is_valid():
       form.save()

@@ -1,12 +1,14 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<p>upload</p>
-<img src={{profile.avatar.url}} alt="{% url 'update-profile' request.user.id %}" style="height: 200px; width: 200px; object-fit: cover; border-radius: 50%;">
-<form method="POST" action="" enctype="multipart/form-data">
-  {% csrf_token %}  
-  {{form}}
-  <!-- <button>Update</button> -->
-  <input type="submit" value="update">
-</form>
+<div class="container text-center">
+  <form class="shadow p-4 mb-5 bg-body rounded" method="POST" action="" enctype="multipart/form-data" style="width: 70%; margin-left: auto; margin-right: auto;">
+    <!-- <img src={{profile.avatar.url}} alt="{% url 'update-profile' request.user.id %}" style="height: 200px; width: 200px; object-fit: cover; border-radius: 50%;"> -->
+    {% csrf_token %}  
+    {{form.as_p}}
+    <!-- <button>Update</button> -->
+    <input class="btn btn-primary bg-gradient" type="submit" value="update">
+  </form>
+</div>
+
 {% endblock %}

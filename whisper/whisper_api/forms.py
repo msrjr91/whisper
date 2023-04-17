@@ -16,14 +16,16 @@ class PostForm(ModelForm):
     exclude = ['user', 'commented']
     
     widgets = {
-      'content': forms.Textarea(attrs={'class': 'form-control  form-control-sm'}),
+      'content': forms.Textarea(attrs={'class': 'form-control  form-control-sm', 'placeholder': "Share your thoughts" }),
       'category': forms.Select(attrs={'class': 'form-select form-select-sm mb-3'}),
     }
 
 class UpdateProfileForm(ModelForm):
+  avatar = forms.ImageField(label="Profile Picture")
+  
   class Meta:
     model = Profile
-    fields = '__all__'
+    fields = ('avatar', )
 
 class RegisterUserForm(UserCreationForm):
   email = forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control'}))
