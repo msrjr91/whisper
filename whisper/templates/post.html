@@ -9,7 +9,7 @@
 
 <div class="container text-center" style="background-color: rgb(255, 255, 255); height: 100%;">
   <div class="row" style="height: 100%;">
-    <div class="col-8" style="height: 100%; overflow: auto;">
+    <div class="col-8" style="height: 100%; overflow: auto; margin-left: auto; margin-right: auto;">
 
       <div class="card" style="width: 75%; margin-left: auto; margin-right: auto; height: 15%; margin-top: 5%; border: 1px solid rgb(233, 233, 233); border-radius: 0;">
         <div class="card-body">
@@ -51,7 +51,7 @@
           <div class="card-body">
             <img src="{{comment.user.profile.avatar.url}}" alt="" style="height: 50px; width: 50px; object-fit: cover; border-radius: 50%; float: left; margin-right: 15px;">
             <div class="container text-start">
-              <small class="card-subtitle">@{{comment.user}} commented - {{post.created|timesince}} ago</small>
+              <small class="card-subtitle">@{{comment.user}} commented - {{comment.created|timesince}} ago</small>
               <p class="card-text">{{comment.content}}</p>
               <div class="container text-end">
                 <small style="margin-right: 15px;"></small>
@@ -66,7 +66,7 @@
       </div>
     </div>
 
-    <div class="col-4" style="height: 100%; overflow: auto;">
+    <!-- <div class="col-4" style="height: 100%; overflow: auto;">
       <div class="empty-right" style="height: 100%; margin-top: 5%">
               
         <div class="card" style="width: 75%; margin-left: auto; margin-right: auto; margin-top: 10%;">
@@ -74,14 +74,14 @@
           {% if commented %}
           <ul class="list-group list-group-flush">
             {% for commenter in commented %}
-            <li class="list-group-item"><a href="{% url 'profile' commenter.profile.id%}"><img src="{{commenter.profile.avatar.url}}" alt="" style="height: 50px; width: 50px; object-fit: cover; border-radius: 50%; float: left; margin-right: 15px;"><small>@{{commenter}}</small></a></li>
+            <li class="list-group-item"><a href="{% url 'profile' commenter.profile.id%}"><img src="{{commenter.profile.avatar.url}}" alt="" style="height: 50px; width: 50px; object-fit: cover; border-radius: 50%; float: left; margin-right: 10px;"><h6>@{{commenter}}</h6></a></li>
             {% endfor %}
           </ul>
           {% endif %}
         </div>
 
       </div>
-    </div>
+    </div> -->
 
   </div>
   

@@ -76,13 +76,7 @@ def home(request):
     my_follows = Profile.objects.get(id=request.user.id).follows.all()
     my_follows_ids = [x.id for x in my_follows]
     
-  print(my_follows)
-  recommended = []
-  for user in all_users:
-    if user not in my_follows:
-      recommended.append(user.username)
-  
-  print('RECOMMENDED', recommended)
+
     
   post_count = None
   comment_count = None
@@ -115,7 +109,7 @@ def home(request):
 
 def singlePost(request, pk):
   post = Post.objects.get(id=pk)
-  comments = Comment.objects.filter(post_id=pk).order_by('-created')
+  comments = Comment.objects.filter(post_id=pk).order_by('created')
   commented = post.commented.all()
   
   if request.method == 'POST':
